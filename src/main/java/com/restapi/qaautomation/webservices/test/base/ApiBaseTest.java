@@ -16,12 +16,37 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ApiBaseTest {
+	private static Logger logger = LogManager.getLogger();
+	
+	public <T> T postRequest(Object requestObject, String url, Class<T> responseClass) throws Exception {
+		try {
+			logger.info("*** Post request sent ***");
+			Response response = 
+					given()
+						.log().all()
+//						.spec(getPostSpec(requestObject))
+						.body(requestObject)
+					.when()
+						.log().all()
+						.post()
+					.then()
+						.log().all()
+						.extract()
+						.response();
+			return objectMapper().readValue(response.asString(), responseClass);
+		} catch(Exception e) {
+			throw new RestAssuredException("!!! Error getting response, request url = " + url);
+		}
+	}
 	
 	public <T> T getRequest(Object requestObject, String url, Class<T> responseClass) throws Exception {
 		try {
-		Response response = 
+			logger.info("*** Get request sent ***");
+			Response response = 
 				given()
 					.log()
 					.all()
