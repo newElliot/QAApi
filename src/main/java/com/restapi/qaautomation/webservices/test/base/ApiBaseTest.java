@@ -22,6 +22,69 @@ import org.apache.logging.log4j.Logger;
 public class ApiBaseTest {
 	private static Logger logger = LogManager.getLogger();
 	
+	public <T> T deleteRequest(Object requestObject, String url, Class<T> responseClass) throws Exception {
+		try {
+			logger.info("*** Delete request sent ***");
+			Response response = 
+					given()
+						.log().all()
+//						.spec(getDeleteSpec(requestObject))
+						.body(requestObject)
+					.when()
+						.log().all()
+						.delete(url)
+					.then()
+						.log().all()
+						.extract()
+						.response();
+			return objectMapper().readValue(response.asString(), responseClass);
+		} catch(Exception e) {
+			throw new RestAssuredException("!!! Error getting response, request url = " + url);
+		}
+	}
+	
+	public <T> T patchRequest(Object requestObject, String url, Class<T> responseClass) throws Exception {
+		try {
+			logger.info("*** Patch request sent ***");
+			Response response = 
+					given()
+						.log().all()
+//						.spec(getPatchSpec(requestObject))
+						.body(requestObject)
+					.when()
+						.log().all()
+						.patch(url)
+					.then()
+						.log().all()
+						.extract()
+						.response();
+			return objectMapper().readValue(response.asString(), responseClass);
+		} catch(Exception e) {
+			throw new RestAssuredException("!!! Error getting response, request url = " + url);
+		}
+	}
+	
+	public <T> T putRequest(Object requestObject, String url, Class<T> responseClass) throws Exception {
+		try {
+			logger.info("*** Put request sent ***");
+			Response response = 
+					given()
+						.log().all()
+//						.spec(getPutSpec(requestObject))
+						.body(requestObject)
+					.when()
+						.log().all()
+						.put(url)
+					.then()
+						.log().all()
+						.extract()
+						.response();
+			return objectMapper().readValue(response.asString(), responseClass);
+		} catch(Exception e) {
+			throw new RestAssuredException("!!! Error getting response, request url = " + url);
+		}
+	}
+	
 	public <T> T postRequest(Object requestObject, String url, Class<T> responseClass) throws Exception {
 		try {
 			logger.info("*** Post request sent ***");
@@ -32,7 +95,7 @@ public class ApiBaseTest {
 						.body(requestObject)
 					.when()
 						.log().all()
-						.post()
+						.post(url)
 					.then()
 						.log().all()
 						.extract()
