@@ -7,7 +7,6 @@
   
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <xifin-sso-org-configs.version>12.6.0</xifin-sso-org-configs.version>
         <xifin-encryptionutil.version>1.1.0</xifin-encryptionutil.version>
         <restassured.version>4.4.0</restassured.version>
         <reportng.version>1.1.4</reportng.version>
